@@ -165,7 +165,27 @@ to the native Ruby type.</p>
 <p>Valid types are:</p>
 <ul><li>
 <p><code>int</code>, <code>integer</code>: Integer</p>
+</li><li>
+<p><code>float</code>: floating point number</p>
+</li><li>
+<p><code>regex</code>, <code>regexp</code>: valid regular expression</p>
 </li></ul>
+
+<h3 id="label-choices"><code>choices</code></h3>
+
+<p>A list of valid choices. The user can select one of the given items, but
+they can not define their own.</p>
+
+<h4 id="label-Examples">Examples</h4>
+
+<pre class="code ruby"><code class="ruby">- q: &quot;Pick your starter&quot;
+  choices: [&quot;Charmander&quot;, &quot;Bulbasaur&quot;, &quot;Squirtle&quot;]
+
+- q: &quot;Pick your language&quot;
+  choices:
+  - Ruby
+  - Python
+  - Perl</code></pre>
 
 <h2 id="label-Nesting+questions">Nesting questions</h2>
 
@@ -225,7 +245,7 @@ no</code></pre>
 </div></div>
 
     <div id="footer">
-  Generated on Fri Feb 26 13:38:03 2016 by
+  Generated on Fri Feb 26 16:13:12 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.3.0).
 </div>
