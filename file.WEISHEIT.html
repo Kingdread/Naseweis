@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: WEISHEIT
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!file.WEISHEIT.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: WEISHEIT</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'>
+<h1 id="label-Weisheits-files"><code>Weisheits</code>-files</h1>
+
+<p>A <code>Weisheits</code>-fiile is a YAML file that describes the questions
+that should be asked.</p>
+
+<p>The top level element should be a list of questions, whereas the syntax of
+a question is described below.</p>
+
+<h2 id="label-question+objects">question objects</h2>
+
+<p>A question is a simple dictionary of various “modifiers”, which allow you
+to customize the behaviour.</p>
+
+<p>Available options are:</p>
+
+<h3 id="label-q"><code>q</code></h3>
+
+<p>The actual question as a string, which is then used as a prompt, or a list
+of subquestions. If this attribute is a string, then the input will be
+saved, otherwise a dictionary of the sub-question responses will be saved.</p>
+
+<h4 id="label-Examples">Examples</h4>
+
+<pre class="code ruby"><code class="ruby"># Simple string question
+- q: &quot;What is your name?&quot;
+  target: user_name
+
+# Subquestions
+- target: user_data
+  q:
+  - q: &quot;User name?&quot;
+    target: name
+  - q: &quot;User email?&quot;
+    target: email</code></pre>
+
+<p>In the first case, the result is available via
+<code>result["user_name"]</code>, in the second case, the name is saved as
+<code>result["user_data"][&quot;name&quot;]</code> and
+<code>result["user_data"][&quot;email&quot;]</code>.</p>
+
+<h3 id="label-target"><code>target</code></h3>
+
+<p>The name of the target variable, which will contain the user data.</p>
+
+<p>If the question is a normal string, the data is saved as a string. If the
+question has subquestions, the data is a hash, which contains the
+subquestions data. If the question is repeated, the data is saved as a list
+of separate inputs. If the question has a type specified, it will be
+type-converted.</p>
+
+<h3 id="label-desc"><code>desc</code></h3>
+
+<p>Description of the question, which will be printed before the question is
+asked. This is useful e.g. for repeating questions, as it will be displayed
+once (while the prompt will be displayed multiple times). It can also be
+used as a “print” function if no question data is gathered.</p>
+
+<h4 id="label-Examples">Examples</h4>
+
+<pre class="code ruby"><code class="ruby">- desc: &quot;Just print something&quot;
+
+- desc: &quot;Gather some lines, input an empty line to finish&quot;
+  repeat: true
+  target: lines</code></pre>
+
+<h3 id="label-repeat"><code>repeat</code></h3>
+
+<p>Define if the question should be repeated. A repeated question will save
+its result as a list. The prompt is displayed at each iteration, if you
+only want to display it once, use <code>desc</code> instead.</p>
+
+<p>There are multiple ways a question can be repeated:</p>
+<ul><li>
+<p><code>repeat: true</code>: repeat until an empty line is entered.</p>
+</li><li>
+<p><code>repeat: 3</code>: repeat 3 times.</p>
+</li><li>
+<p><code>repeat: &quot;Continue?&quot;</code>: ask the given prompt, if it is
+answered with “yes”,  repeat the question again.</p>
+</li></ul>
+
+<p>Note that the presence of the <code>repeat</code> attribute is enough to
+force the answer to be a list, even if the actual question produces 0 or 1
+inputs.</p>
+
+<h4 id="label-Examples">Examples</h4>
+
+<pre class="code ruby"><code class="ruby">- desc: &quot;Enter your address, end with an empty line&quot;
+  repeat: true
+  target: address
+
+- prompt: &quot;Your sibling&#39;s name?&quot;
+  target: siblings
+  repeat: &quot;Do you have another sibling?&quot;</code></pre>
+
+<h3 id="label-type"><code>type</code></h3>
+
+<p>Type of the question. This is used to both verify the input and convert it
+to the native Ruby type.</p>
+
+<p>Valid types are:</p>
+<ul><li>
+<p><code>int</code>, <code>integer</code>: Integer</p>
+</li></ul>
+
+<h2 id="label-Nesting+questions">Nesting questions</h2>
+
+<p>Questions can be nested arbitrarily deep, if you want to make an address
+book, you could do something like</p>
+
+<pre class="code ruby"><code class="ruby">- desc: &quot;Fill your address book!&quot;
+  repeat: &quot;Add another contact?&quot;
+  target: contacts
+  q:
+  - q: &quot;Contact name?&quot;
+    target: name
+  - q: &quot;Contact address?&quot;
+    target: address
+  - desc: &quot;Additional information (end with an empty line)&quot;
+    repeat: true
+    target: information</code></pre>
+
+<p>Processing the file will lead to the following interaction:</p>
+
+<pre class="code ruby"><code class="ruby">&gt;&gt;&gt; Fill your address book!
+&gt;&gt;&gt; Contact name?
+Darth Vader
+&gt;&gt;&gt; Contact address?
+Death Star
+&gt;&gt;&gt; Additional information (end with an empty line)
+Very nice guy!
+
+&gt;&gt;&gt; Add another contact?
+yes
+&gt;&gt;&gt; Contact name?
+Luke Skywalker
+&gt;&gt;&gt; Contact address?
+Dagobah
+&gt;&gt;&gt; Additional information (end with an empty line)
+
+&gt;&gt;&gt; Add another contact?
+no</code></pre>
+
+<p>And finally to the Ruby structure:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='lbrace'>{</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>contacts</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='lbracket'>[</span>
+    <span class='lbrace'>{</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>name</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Darth Vader</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>address</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Death Star</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>information</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Very nice guy!</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+    <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>name</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Luke Skywalker</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>address</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Dagobah</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>information</span><span class='tstring_end'>&quot;</span></span><span class='op'>=&gt;</span><span class='lbracket'>[</span><span class='rbracket'>]</span>
+    <span class='rbrace'>}</span>
+  <span class='rbracket'>]</span>
+<span class='rbrace'>}</span>
+</code></pre>
+</div></div>
+
+    <div id="footer">
+  Generated on Fri Feb 26 13:38:03 2016 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-2.3.0).
+</div>
+
+  </body>
+</html>

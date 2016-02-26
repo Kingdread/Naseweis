@@ -51,6 +51,17 @@
   </div>
 
   
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-Weisheits-files"><code>Weisheits</code>-files</a>
+    <li><a href="#label-question+objects">question objects</a>
+    <li><a href="#label-q"><code>q</code></a>
+    <li><a href="#label-Examples">Examples</a>
+  </ul>
+</div>
+
 
   <div id="project-metadata">
     <div id="fileindex-section" class="nav-section">
@@ -69,6 +80,32 @@
 </nav>
 
 <main role="main" aria-label="Page WEISHEIT.md">
+
+<h1 id="label-Weisheits-files"><code>Weisheits</code>-files<span><a href="#label-Weisheits-files">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>A <code>Weisheits</code>-fiile is a YAML file that describes the questions
+that should be asked.</p>
+
+<p>The top level element should be a list of questions, whereas the syntax of
+a question is described below.</p>
+
+<h2 id="label-question+objects">question objects<span><a href="#label-question+objects">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>A question is a simple dictionary of various “modifiers”, which allow you
+to customize the behaviour.</p>
+
+<p>Available options are:</p>
+
+<h3 id="label-q"><code>q</code><span><a href="#label-q">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>The actual question as a string, which is then used as a prompt, or a list
+of subquestions. If this attribute is a string, then the input will be
+saved, otherwise a dictionary of the sub-question responses will be saved.</p>
+
+<h4 id="label-Examples">Examples<span><a href="#label-Examples">&para;</a> <a href="#top">&uarr;</a></span></h4>
+<ul><li>
+<p><code>q: &quot;What is your name?&quot;</code></p>
+</li></ul>
 </main>
 
 
