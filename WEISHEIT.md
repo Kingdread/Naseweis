@@ -104,6 +104,24 @@ Valid types are:
 * `float`: floating point number
 * `regex`, `regexp`: valid regular expression
 
+### `choices`
+
+A list of valid choices. The user can select one of the given items, but they
+can not define their own.
+
+#### Examples
+
+```yaml
+- q: "Pick your starter"
+  choices: ["Charmander", "Bulbasaur", "Squirtle"]
+
+- q: "Pick your language"
+  choices:
+  - Ruby
+  - Python
+  - Perl
+```
+
 ## Nesting questions
 
 Questions can be nested arbitrarily deep, if you want to make an address book,
