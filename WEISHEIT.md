@@ -101,6 +101,7 @@ the native Ruby type.
 Valid types are:
 
 * `int`, `integer`: Integer
+* `float`: floating point number
 * `regex`, `regexp`: valid regular expression
 
 ## Nesting questions

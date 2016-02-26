@@ -1,3 +1,3 @@
 # 0.0.2 (unreleased)
 
-* Add `regex` type
+* Add `regex` and `float` types

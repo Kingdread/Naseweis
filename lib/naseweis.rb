@@ -137,6 +137,7 @@ module Naseweis
         integer: ->(x) { Integer x },
         regex: ->(x) { Regexp.new x },
         regexp: ->(x) { Regexp.new x },
+        float: ->(x) { Float x },
       }
       begin
         types[target.intern][data]
