@@ -116,7 +116,7 @@ module Naseweis
         begin
           result = convert result, q['type']
         rescue ArgumentError
-          @io.say "invalid value for type#{q['type']}"
+          @io.say "invalid value for type #{q['type']}"
         else
           break
         end
@@ -133,10 +133,16 @@ module Naseweis
     #   target
     def convert(data, target)
       types = {
-        int: :Integer,
-        integer: :Integer,
+        int: ->(x) { Integer x },
+        integer: ->(x) { Integer x },
+        regex: ->(x) { Regexp.new x },
+        regexp: ->(x) { Regexp.new x },
       }
-      method(types[target.intern]).call(data)
+      begin
+        types[target.intern][data]
+      rescue RegexpError
+        raise ArgumentError, "Can't convert #{data} to #{target}"
+      end
     end
   end
 end

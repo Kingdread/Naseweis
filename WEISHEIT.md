@@ -101,6 +101,7 @@ the native Ruby type.
 Valid types are:
 
 * `int`, `integer`: Integer
+* `regex`, `regexp`: valid regular expression
 
 ## Nesting questions
 
