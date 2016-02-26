@@ -86,6 +86,7 @@ module Naseweis
         while true do
           line = get_valid_input q
           break if line.empty?
+          result << line
         end
         return result
       end
