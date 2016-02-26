@@ -1,0 +1,23 @@
+AllCops:
+  Include:
+    - 'lib'
+  Exclude:
+    - 'Naseweis.gemspec'
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Metrics/PerceivedComplexity:
+  Max: 9
+
+Metrics/AbcSize:
+  Max: 20

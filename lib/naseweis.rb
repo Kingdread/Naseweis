@@ -1,6 +1,6 @@
-require "Naseweis/version"
-require "yaml"
-require "highline"
+require 'naseweis/version'
+require 'yaml'
+require 'highline'
 
 # The Naseweis module is a module which takes a +Weisheits+-file (or short
 # +Weisfile+) and asks the user the questions that are defined in the
@@ -60,9 +60,7 @@ module Naseweis
       namespace = {}
       questions.each do |q|
         answer = do_question q
-        if q.key? "target" and answer != nil then
-          namespace[q["target"]] = answer
-        end
+        namespace[q['target']] = answer if q.key?('target') && !answer.nil?
       end
       namespace
     end
@@ -73,31 +71,26 @@ module Naseweis
     # @return [String] for a simple question
     # @return [Array] for a repeating question
     def do_question(q)
-      if q.key? "desc" then
+      if q.key? 'desc'
         # Always output the description first
-        @io.say q["desc"]
+        @io.say q['desc']
       end
 
-      repeat = q["repeat"]
-      if repeat == nil then
-        return get_valid_input q
-      elsif repeat.is_a? Integer then
-        return (1..repeat).collect { get_valid_input q }
-      elsif repeat.is_a? String then
+      repeat = q['repeat']
+      return get_valid_input q if repeat.nil?
+      return (1..repeat).collect { get_valid_input q } if repeat.is_a? Integer
+      if repeat.is_a? String
         result = [get_valid_input(q)]
-        while @io.agree repeat do
-          result.push(get_valid_input(q))
-        end
-        return result
+        result.push(get_valid_input(q)) while @io.agree repeat
       else
         result = []
-        while true do
+        loop do
           line = get_valid_input q
           break if line.empty?
           result << line
         end
-        return result
       end
+      result
     end
 
     # Get a single line of user input that is valid for the given question
@@ -107,27 +100,24 @@ module Naseweis
     # @return [Hash] if the question has sub-questions
     # @return [Object] if the question is type-converted
     def get_valid_input(q)
-      prompt = q["q"]
-      prompt = prompt == nil ? "" : prompt
-      while true do
-        result = if prompt.is_a? Array then
-          ask prompt
-        elsif q["choices"] != nil then
+      prompt = q['q']
+      prompt = '' if prompt.nil?
+      result = nil
+      loop do
+        if prompt.is_a? Array
+          result = ask prompt
+        elsif !q['choices'].nil?
           @io.say prompt
-          @io.choose *q["choices"]
+          result = @io.choose(*q['choices'])
         else
-          @io.ask prompt
+          result = @io.ask prompt
         end
-        if q["type"] != nil then
-          begin
-            result = convert result, q["type"]
-          rescue ArgumentError
-            @io.say "invalid value for type#{q["type"]}"
-          else
-            break
-          end
+        break if q['type'].nil?
+        begin
+          result = convert result, q['type']
+        rescue ArgumentError
+          @io.say "invalid value for type#{q['type']}"
         else
-          # Break immediately if we don't need a typecheck
           break
         end
       end
@@ -143,8 +133,8 @@ module Naseweis
     #   target
     def convert(data, target)
       types = {
-        :int => :Integer,
-        :integer => :Integer,
+        int: :Integer,
+        integer: :Integer,
       }
       method(types[target.intern]).call(data)
     end
