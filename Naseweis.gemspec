@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.extra_rdoc_files = ["README.md", "WEISHEIT.md"]
+  spec.extra_rdoc_files = ["README.md", "WEISHEIT.md", "CHANGELOG.md"]
   spec.rdoc_options << "--title" << "Naseweis Documentation" <<
                        "--main" << "README.md"
 
