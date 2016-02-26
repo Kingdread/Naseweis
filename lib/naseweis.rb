@@ -16,6 +16,10 @@ require 'highline'
 #
 # For more information about the file format see the +Weisfile+ document.
 module Naseweis
+  # Exception raised when the input file (+Weisheits+-file) is malformed
+  class WeisheitError < StandardError
+  end
+
   # A class to read a +Weisfile+ and gather user input
   #
   # @attr_reader [String] filename The path to the file which is used by this
@@ -41,8 +45,29 @@ module Naseweis
     # initialized with
     #
     # @return [void]
+    # @raise [WeisheitError] if the input file is malformed
     def read
-      @questions = YAML.load_file(@filename)
+      questions = YAML.load_file(@filename)
+      verify questions
+      @questions = questions
+    end
+
+    # Check whether the given question is wellformed
+    #
+    # @param q [Hash,Array] the question or list of questions to check
+    # @return [void]
+    # @raise [WeisheitError] if the question is malformed
+    def verify(q)
+      # Currently only checks if the question type is valid
+      if q.is_a? Array
+        q.each { |x| verify x }
+        return
+      end
+      type = q['type']
+      qs = q['q']
+      well = type.nil? || @converter.supported_types.include?(type.intern)
+      raise WeisheitError, "invalid type #{type}" unless well
+      verify qs if qs.is_a? Array
     end
 
     # Start the question session and return the user answers
