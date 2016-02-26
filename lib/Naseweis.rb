@@ -16,18 +16,18 @@ require "highline"
 # For more information about the file format see the +Weisfile+ document.
 module Naseweis
   # A class to read a +Weisfile+ and gather user input
+  #
+  # @attr_reader [String] filename The path to the file which is used by this
+  #   {Nase}
+  # @attr_reader [Array] questions All questions handled by this {Nase}.
+  #
+  #   To update the questions, use the {#read} method.
   class Nase
-    # The path to the file which is used by this Nase
-    attr_reader :filename
+    attr_reader :filename, :questions
 
-    # A hash of questions
-    # 
-    # Use the #read method to update this attribute and re-read the file
-    attr_reader :questions
-
-    # Create a new Nase which reads questions from the given file
-    # Params:
-    # +path+:: path to the file with the questions
+    # Create a new {Nase} which reads questions from the given file
+    #
+    # @param path [String] path to the file with the questions
     def initialize(path)
       @filename = path
       @questions = {}
@@ -35,11 +35,16 @@ module Naseweis
 
     # Update the questions and re-read them from the file that the Nase was
     # initialized with
+    #
+    # @return [void]
     def read
       @questions = YAML.load_file(@filename)
     end
 
     # Start the question session and return the user answers
+    #
+    # @return [Hash] Hash of the user answers, where the keys are defined by
+    #   the question file.
     def interrogate
       @io = HighLine.new
       ask @questions
@@ -48,8 +53,9 @@ module Naseweis
     private
 
     # Ask the given list of questions and return the answers as a Hash
-    # Params:
-    # +questions+:: list of questions to ask
+    #
+    # @param questions [Array] list of questions to ask
+    # @return [Hash] Hash of the user answers
     def ask(questions)
       namespace = {}
       questions.each do |q|
@@ -62,8 +68,10 @@ module Naseweis
     end
 
     # Handle a single question and return the answer
-    # Params:
-    # +q+:: the question data
+    #
+    # @param q [Hash] the question data
+    # @return [String] for a simple question
+    # @return [Array] for a repeating question
     def do_question(q)
       if q.key? "desc" then
         # Always output the description first
@@ -93,8 +101,11 @@ module Naseweis
     end
 
     # Get a single line of user input that is valid for the given question
-    # Params:
-    # +q+:: the question which to get input for
+    #
+    # @param q [Hash] the question which to get input for
+    # @return [String] if the question is a simple question
+    # @return [Hash] if the question has sub-questions
+    # @return [Object] if the question is type-converted
     def get_valid_input(q)
       prompt = q["q"]
       prompt = prompt == nil ? "" : prompt
@@ -124,6 +135,12 @@ module Naseweis
     end
 
     # Convert the data to the given target type
+    #
+    # @param data [String] the question answer
+    # @param target [String] the target type
+    # @return [Object] the converted data
+    # @raise [ArgumentError] if the data cannot be converted to the given
+    #   target
     def convert(data, target)
       types = {
         :int => :Integer,
