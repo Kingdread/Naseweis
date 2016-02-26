@@ -51,12 +51,19 @@ module Naseweis
     #   target
     def convert(data, type)
       type = type.intern
-      raise ArgumentError, "Invalid type #{type}" if !@converters.key? type
+      raise ArgumentError, "Invalid type #{type}" unless @converters.key? type
       begin
         @converters[type][data]
       rescue
         raise ConversionError.new data, type
       end
+    end
+
+    # Get a list of all supported types
+    #
+    # @return [Array] an array of supported types
+    def supported_types
+      @converters.keys
     end
   end
 end
