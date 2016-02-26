@@ -43,11 +43,15 @@ module Naseweis
 
     # Start the question session and return the user answers
     #
+    # @param instream [File] input stream, i.e. stream where data is read from
+    # @param outstream [File] output stream, i.e. stream where prompts are
+    #   printed to
     # @return [Hash] Hash of the user answers, where the keys are defined by
     #   the question file.
-    def interrogate
-      @io = HighLine.new
+    def interrogate(instream: $stdin, outstream: $stdout)
+      @io = HighLine.new instream, outstream
       ask @questions
+      @io = nil
     end
 
     private
