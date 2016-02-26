@@ -33,7 +33,7 @@ result["times"].times { puts "Hello, #{name}" }
 The `Weisheits` format is a normal YAML file, which defines questions, their
 target name, their type, and some more information.
 
-The full description can be found in WEISHEIT.md.
+The full description can be found in {file:WEISHEIT.md WEISHEIT.md}.
 
 ## Installation
 
