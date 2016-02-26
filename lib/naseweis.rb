@@ -1,3 +1,4 @@
+require 'naseweis/converter'
 require 'naseweis/version'
 require 'yaml'
 require 'highline'
@@ -22,8 +23,10 @@ module Naseweis
   # @attr_reader [Array] questions All questions handled by this {Nase}.
   #
   #   To update the questions, use the {#read} method.
+  # @attr_reader [Converter] converter The converter that is used to convert
+  #   types
   class Nase
-    attr_reader :filename, :questions
+    attr_reader :filename, :questions, :converter
 
     # Create a new {Nase} which reads questions from the given file
     #
@@ -31,6 +34,7 @@ module Naseweis
     def initialize(path)
       @filename = path
       @questions = {}
+      @converter = Converter.new
     end
 
     # Update the questions and re-read them from the file that the Nase was
@@ -118,36 +122,14 @@ module Naseweis
         end
         break if q['type'].nil?
         begin
-          result = convert result, q['type']
-        rescue ArgumentError
+          result = @converter.convert result, q['type']
+        rescue ConversionError
           @io.say "invalid value for type #{q['type']}"
         else
           break
         end
       end
       result
-    end
-
-    # Convert the data to the given target type
-    #
-    # @param data [String] the question answer
-    # @param target [String] the target type
-    # @return [Object] the converted data
-    # @raise [ArgumentError] if the data cannot be converted to the given
-    #   target
-    def convert(data, target)
-      types = {
-        int: ->(x) { Integer x },
-        integer: ->(x) { Integer x },
-        regex: ->(x) { Regexp.new x },
-        regexp: ->(x) { Regexp.new x },
-        float: ->(x) { Float x },
-      }
-      begin
-        types[target.intern][data]
-      rescue RegexpError
-        raise ArgumentError, "Can't convert #{data} to #{target}"
-      end
     end
   end
 end
