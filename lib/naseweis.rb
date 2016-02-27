@@ -1,4 +1,5 @@
 require 'naseweis/converter'
+require 'naseweis/range'
 require 'naseweis/version'
 require 'naseweis/util'
 require 'yaml'
@@ -153,14 +154,20 @@ module Naseweis
             next
           end
         end
+
         break if q['type'].nil?
+
         begin
           result = @converter.convert result, q['type']
         rescue ConversionError
           @io.say "invalid value for type #{q['type']}"
-        else
-          break
+          next
         end
+
+        break if !Range.ranged_type?(q['type']) || q['range'].nil?
+        range = Range.new q['range']
+        break if range.include? result
+        @io.say "value out of range (#{range})"
       end
       result
     end

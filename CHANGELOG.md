@@ -1,6 +1,6 @@
 # 0.0.3 (unreleased)
 
-* Add `validate` option
+* Add `validate` and `range` options
 
 # 0.0.2
 

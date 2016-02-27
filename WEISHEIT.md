@@ -109,11 +109,6 @@ Valid types are:
 A list of valid choices. The user can select one of the given items, but they
 can not define their own.
 
-### `validate`
-
-A regex that is used to validate the input. Input that does not match the regex
-will be rejected.
-
 #### Examples
 
 ```yaml
@@ -125,6 +120,35 @@ will be rejected.
   - Ruby
   - Python
   - Perl
+```
+
+### `validate`
+
+A regex that is used to validate the input. Input that does not match the regex
+will be rejected.
+
+### `range`
+
+Numeric range for the input. Should be in the form `min < x < max`. If the
+range is unlimited on one end, you can omit this side and use `0 < x` and `x <
+0`. If the endpoints are included, you can replace `<` with `<=`.
+
+#### Examples
+
+Valid examples:
+
+```yaml
+- range: 0 < x < 10
+- range: x <= 20
+- range: -4.5 <= x < 100
+```
+
+**Invalid** examples:
+
+```yaml
+- range: 0 < y < 10
+- range: x > 5
+- range: 0 < x < 5 < 10
 ```
 
 ## Nesting questions

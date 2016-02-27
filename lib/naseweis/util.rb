@@ -14,5 +14,20 @@ module Naseweis
       end
       true
     end
+
+    # Parse the given string into a number.
+    #
+    # The number is parsed as a float if it includes a dot, otherwise it is
+    # parsed as integer. If +nil+ is passed, +nil+ is returned.
+    #
+    # @param num [String] the number string to convert
+    # @return [Float] if the given string represents a float
+    # @return [Integer] if the given string represents an integer
+    # @return [NilClass] if the input was +nil+
+    def self.parse_num(num)
+      return nil if num.nil?
+      return Float num if num.include? '.'
+      Integer num
+    end
   end
 end
