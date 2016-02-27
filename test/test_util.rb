@@ -2,7 +2,7 @@ require 'minitest/spec'
 require 'minitest/autorun'
 require 'naseweis/util'
 
-describe 'test Naseweis::Util' do
+describe Naseweis::Util do
   [
     ['', true],
     ['.', true],
