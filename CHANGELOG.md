@@ -1,6 +1,7 @@
 # 0.0.3 (unreleased)
 
 * Add `validate` and `range` options
+* Add `minitest` for tests
 
 # 0.0.2
 
