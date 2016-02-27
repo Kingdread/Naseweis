@@ -53,7 +53,7 @@ module Naseweis
 
     # Generate a string representation for this range
     #
-    # The result can be fed back into {#new} to get the same range
+    # The result can be fed back into {#initialize} to get the same range
     #
     # @return [String] the string representation
     def to_s
