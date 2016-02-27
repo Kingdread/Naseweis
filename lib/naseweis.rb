@@ -1,5 +1,6 @@
 require 'naseweis/converter'
 require 'naseweis/version'
+require 'naseweis/util'
 require 'yaml'
 require 'highline'
 
@@ -58,15 +59,17 @@ module Naseweis
     # @return [void]
     # @raise [WeisheitError] if the question is malformed
     def verify(q)
-      # Currently only checks if the question type is valid
       if q.is_a? Array
         q.each { |x| verify x }
         return
       end
       type = q['type']
+      validate = q['validate']
       qs = q['q']
       well = type.nil? || @converter.supported_types.include?(type.intern)
       raise WeisheitError, "invalid type #{type}" unless well
+      well = validate.nil? || Util.valid_regex?(validate)
+      raise WeisheitError, "invalid regex #{validate}" unless well
       verify qs if qs.is_a? Array
     end
 
@@ -132,9 +135,10 @@ module Naseweis
     # @return [String] if the question is a simple question
     # @return [Hash] if the question has sub-questions
     # @return [Object] if the question is type-converted
-    def get_valid_input(q)
+    def get_valid_input(q) # rubocop: disable Metrics/AbcSize
       prompt = q['q']
       prompt = '' if prompt.nil?
+      validate = q['validate']
       result = nil
       loop do
         if prompt.is_a? Array
@@ -144,6 +148,10 @@ module Naseweis
           result = @io.choose(*q['choices'])
         else
           result = @io.ask prompt
+          if !validate.nil? && !result.match(validate)
+            @io.say "invalid input, must match /#{validate}/"
+            next
+          end
         end
         break if q['type'].nil?
         begin

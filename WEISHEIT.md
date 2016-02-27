@@ -109,6 +109,11 @@ Valid types are:
 A list of valid choices. The user can select one of the given items, but they
 can not define their own.
 
+### `validate`
+
+A regex that is used to validate the input. Input that does not match the regex
+will be rejected.
+
 #### Examples
 
 ```yaml
