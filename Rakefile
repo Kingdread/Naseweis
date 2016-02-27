@@ -6,3 +6,7 @@ task :default => :spec
 Rake::TestTask.new do |t|
   t.pattern = "test/test_*.rb"
 end
+
+task :cop do
+  system 'rubocop lib test'
+end
